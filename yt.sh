@@ -1,32 +1,30 @@
 #!/usr/bin/sh
 v=video
 a=audio
-p=playlist
-c=channel
 f=urls.txt
-fco=$(wc -l < urls.txt)
 
 
 # first if loop to check if urls.txt already exists, for other than youtube.
 # contains 1 if loop and 1 case statement.
-if [[ -f "$1" ]]; 
+if [ -f "$1" ]
 	then
+	fco=$(wc -l < urls.txt)
 	echo "Using $1"
 	echo "1.) $v"
 	echo "2.) $a"
 	echo "3.) exit"
-	read format
+	read -r format
 		case $format in
 		1) 
 		echo "Using $1"
 		echo "$fco videos will be download"
-		<$1 xargs -I{} -P30 bash -c 'yt-dlp -k "{}" --external-downloader aria2c'
+		<"$1" xargs -I{} -P30 bash -c 'yt-dlp -k "{}" --external-downloader aria2c'
 		;;
 		
 		2)	
 		echo "Using $1"
 		echo "$fco audios will be download"
-		<$1 xargs -I{} -P30 bash -c 'yt-dlp -x --audio-format mp3 "{}" --external-downloader aria2c'
+		<"$1" xargs -I{} -P30 bash -c 'yt-dlp -x --audio-format mp3 "{}" --external-downloader aria2c'
 		;;
 		
 		3)
@@ -42,7 +40,7 @@ if [[ -f "$1" ]];
 fi
 # first loop and case ended
 
-if [[ -f "$f" ]]; 					
+if [ -f "$f" ]
 	then
 	echo "##########################################################################"
 	echo "urls.txt already exists"
@@ -51,7 +49,7 @@ if [[ -f "$f" ]];
 	echo "!!!! Do you want to overwrite urls.txt it? !!!!"
 	echo "1.) no" 
 	echo "2.) yes"
-	read overwrite
+	read -r overwrite
 
 	case $overwrite in
 	1) 
@@ -74,16 +72,16 @@ fi
 
 echo "Paste url"
 
-read urls
-yt-dlp --flat-playlist --print url --print title $urls > $f
+read -r urls
+yt-dlp --flat-playlist --print url --print title "$urls" > "$f"
 head urls.txt
-sed -i '0~2d' $f 
+sed -i '0~2d' "$f" 
 numbers=$(awk 'END { print NR }' urls.txt )
 echo "Found $numbers files"
 	echo "1.) $v"
 	echo "2.) $a"
 	echo "3.) exit"
-	read format
+	read -r format
 		case $format in
 		1) 
 		echo "$numbers videos will be download"
