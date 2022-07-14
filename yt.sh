@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 v=video
 a=audio
 p=playlist
